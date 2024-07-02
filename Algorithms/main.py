@@ -1,18 +1,12 @@
-import torch
-from torch import nn
-from torch.utils.data import DataLoader
+WINDOWS_SIZE = 220
+DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-import config
-from engine import test
-from engine import train
-from engine import eval
-from modeling import ECGDataset, PyTorchMinMaxScalerVectorized, fit_min_max_scaler
-from modeling import model_factory
-from util import restore_net
+qtdb_pkl = 'resources/qtdb_pkl/'
+save_path = 'resources/ckpt'
 
-TRAIN = False
-CONTINUE_TRAIN = False
-TEST = True
-EPOCHS = 100
-BATCH_SIZE = 32
-NUM_SEGS_CLASS = 5
+PATH_TO_TEST_MODEL = 'resources/z-score-data/ckpt' + '/epoch_99.ckpt'
+
+if __name__ == '__main__':
+    print(DEVICE)
+    if DEVICE == 'cuda':
+        print(torch.cuda.get_device_name(0))
