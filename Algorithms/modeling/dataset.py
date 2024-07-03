@@ -1,8 +1,14 @@
-import pickle
 
-import torch
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
-from torch.utils.data.dataset import Dataset
+	def __init__(self, data_path, transform=None):
+		self.transform = transform
+		with open(data_path, 'rb') as f:
+			self.x, self.y = pickle.load(f)
 
+	def __len__ (self):
+		return len(self.x)
 
-class ECGDataset (Dataset):
+	def __getitem__ (self, idx):
+		if torch.is_tensor(idx):
+			idx = idx.tolist()
+
+		ecg = torch.from_numpy(self.x[idx]).float()
