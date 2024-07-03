@@ -1,14 +1,14 @@
-from typing import Callable
+        self.transforms = transforms
 
-import pandas as pd
-import torch
-import torch.utils.data as data
+    def __len__(self):
+        return self.annotations.shape[0]
 
-from ecg_tools.config import DatasetConfig, Mode
+    def __getitem__(self, item):
+        signal = self.annotations[item, :-1]
+        label = int(self.annotations[item, -1])
+        # TODO: add augmentations
+        signal = torch.from_numpy(signal).float()
+        signal = self.transforms(signal)
+        return signal.unsqueeze(0), torch.tensor(label).long()
 
 
-class EcgLoader(data.Dataset):
-
-    def __init__(self, csv_file, transforms: Callable = lambda x: x) -> None:
-        super().__init__()
-        self.annotations = pd.read_csv(csv_file).values
