@@ -1,14 +1,15 @@
-import torch
-import torch.nn as nn
+					num_layers=num_layers,
+					batch_first=True,
+					bidirectional=True
+			),
+		)
+		self.classifier = torch.nn.Sequential(
+			torch.nn.Linear(2*hidden_size, 2*hidden_size),
+			torch.nn.ReLU(inplace=True),
+			torch.nn.Dropout(),
 
-import config
-from util import load_json
-
-
-class SegModel(torch.nn.Module):
-	def __init__(self, input_size, hidden_size, num_layers, out_size):
-		super().__init__()
-		self.features = torch.nn.Sequential(
-			torch.nn.LSTM(
-					input_size=input_size,
-					hidden_size=hidden_size,
+			torch.nn.Linear(2 * hidden_size, 2 * hidden_size),
+			torch.nn.ReLU(inplace=True),
+			torch.nn.Dropout(),
+		)
+		self.output = torch.nn.Linear(2*hidden_size, out_size)
