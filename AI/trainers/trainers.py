@@ -1,4 +1,7 @@
-from dataloaders.dataset1d import EcgDataset1D
-from dataloaders.dataset2d import EcgDataset2D
-from models import models1d, models2d
-from trainers.base_trainer import BaseTrainer
+
+
+class Trainer2D(BaseTrainer):
+    def __init__(self, config):
+        super().__init__(config)
+
+    def _init_net(self):
