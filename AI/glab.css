@@ -1,0 +1,20 @@
+TABLE {
+	VERTICAL-ALIGN: top; BORDER-TOP-STYLE: none; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; BORDER-BOTTOM-STYLE: none
+}
+BODY {
+	FONT-SIZE: small; COLOR: black; FONT-FAMILY: Georgia, "New Century Schoolbook", Times, serif; BACKGROUND-COLOR: white
+}
+IMG {
+	BORDER-TOP-STYLE: none; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; BORDER-BOTTOM-STYLE: none
+}
+H1 {
+	FONT-WEIGHT: normal
+}
+H2 {
+	MARGIN-TOP: 12px; FONT-WEIGHT: normal; MARGIN-BOTTOM: 0px
+}
+H3 {
+	MARGIN-TOP: 6px; FONT-SIZE: small; MARGIN-BOTTOM: 0px
+}
+P {
+	MARGIN-TOP: 0px
