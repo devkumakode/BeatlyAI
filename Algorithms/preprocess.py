@@ -1,16 +1,14 @@
-import json
-import os
-import pickle
-
-import BaselineWanderRemoval
-import numpy as np
-import pandas as pd
-
-import config
-
-pd.set_option('display.max_columns', 20)
-pd.set_option('display.width', 1000)
+SAVE_TO_FILE = False
 
 
-INSPECT = False
-WINDOW_LEN = 220
+def extract_name (text, start_marker, end_marker):
+	start = text.index(start_marker) + len(start_marker)
+	end = text.index(end_marker, start)
+
+	return text[start:end]
+
+
+def load_json (filename):
+	with open(filename) as f:
+		data = json.load(f)
+		f.close()
