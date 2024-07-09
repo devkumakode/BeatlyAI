@@ -1,8 +1,5 @@
-		label = torch.from_numpy(self.y[idx]).float()
+			sample['ecg'] = self.transform(sample['ecg'])
 
-		sample = {
-			'ecg': ecg,
-			'label': label
-		}
+		return sample
 
-		if self.transform:
+
