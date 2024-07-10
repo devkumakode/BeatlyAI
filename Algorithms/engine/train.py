@@ -1,11 +1,4 @@
-import matplotlib.pyplot as plt
-import numpy as np
-import torch
-
-import config
-from util import save_as_pkl
-
-
-def plotecg(x, y, start, end):
-    x = x[start:end, 0]
-    y = y[start:end]
+    cmap = ['k', 'r', 'g', 'b']
+    start = end = 0
+    for i in range(len(y)-1):
+        if y[i] != y[i+1]:
