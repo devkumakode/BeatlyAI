@@ -1,11 +1,6 @@
-
-
-class ECGDataSet(Dataset):
-    
-    def __init__(self, split='train'):
-
-        self.split = split
-
-        # data loading
-        current_directory = os.getcwd()
-        self.parent_directory = os.path.dirname(current_directory)
+        train_small_path = os.path.join(self.parent_directory, 'data', 'deepfake-ecg-small', str(self.split) + '.csv')
+        self.df = pd.read_csv(train_small_path)  # Skip the header row
+        
+        # Avg RR interval
+        # in milli seconds
+        RR = torch.tensor(self.df['avgrrinterval'].values, dtype=torch.float32)
