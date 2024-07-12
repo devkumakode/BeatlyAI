@@ -1,11 +1,11 @@
 
-		features = self.features(x)
-		features_res = features.reshape((batch, 398, 1))
 
-		memory, _ = self.memory(features_res)
-		deconv = self.deconv(memory.reshape((batch, 64, 398)))
-		deconv = deconv.reshape((batch, seq_len, 32))
-		output = self.classifier(deconv)
-		out = self.output(output.view(batch * seq_len, -1))
+def model_factory (model_name):
+	model_params = load_json(config.ROOT_DIR + '/model_params.json')[model_name]
 
-		return out
+	if model_name == 'seg-net':
+		return SegModel(
+				input_size=model_params['input_size'],
+				hidden_size=model_params['hidden_size'],
+				num_layers=model_params['num_layers'],
+				out_size=model_params['out_size']
