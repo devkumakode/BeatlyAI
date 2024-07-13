@@ -1,8 +1,12 @@
-        embedded = super().forward(x)
-        return torch.cat([einops.repeat(self.cls_token, "n e -> b n e", b=x.shape[0]), embedded], dim=1)
+            nn.GELU(),
+            nn.Linear(input_channels * expansion, input_channels)
+        ])
 
 
-class MLP(nn.Sequential):
-    def __init__(self, input_channels, expansion=4):
-        super().__init__(*[
-            nn.Linear(input_channels, input_channels * expansion),
+class ResidualAdd(torch.nn.Module):
+    def __init__(self, block):
+        super().__init__()
+        self.block = block
+
+    def forward(self, x):
+        return x + self.block(x)
