@@ -1,12 +1,8 @@
-from keras.layers import Convolution1D
-from keras.models import Sequential
-from keras.layers import Activation, Dense, Flatten, Dropout
-from data import process_data
-from keras import backend as K
-import numpy  as np
-import os
+malignant_data = np.loadtxt(open('datasets/processed/malignant-ventricular-ectopy.csv', 'r'), skiprows=1)
+arrhy_data = arrhy_data[:len(malignant_data)]
+arrhy_len = len(arrhy_data)/500
 
-if not os.listdir('datasets/processed'):
-    process_data()
-
-arrhy_data = np.loadtxt(open('datasets/processed/arrhythmia.csv', 'r'), skiprows=1)
+i = 0
+X_train = []
+inter_X_train = []
+inter_y_train = []
