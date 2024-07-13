@@ -1,14 +1,10 @@
-import torch
+class RandomShift:
 
-
-class Compose:
-
-    def __init__(self, transforms) -> None:
-        self.transforms = transforms
+    def __init__(self, max_num_samples: int, probability=0.5) -> None:
+        self._m = max_num_samples
+        self._p = probability
 
     def __call__(self, signal):
-        for t in self.transforms:
-            signal = t(signal)
-        return signal
-
+        if torch.rand(1) > self._p:
+            return signal
 
