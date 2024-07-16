@@ -1,2 +1,6 @@
-from torch.optim.optimizer import Optimizer, required
 
+class ALQ_optimizer(Optimizer):
+
+    """Implement ALQ optimizer.
+
+    Arguments:
