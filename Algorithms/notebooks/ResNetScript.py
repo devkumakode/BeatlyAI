@@ -1,8 +1,15 @@
-        self.samples = self.df.shape[0]
+        ecg_signals = pd.read_csv( asc_path, header=None, sep=" ") # read into dataframe
+        ecg_signals = torch.tensor(ecg_signals.values) # convert dataframe values to tensor
+        
+        ecg_signals = ecg_signals.float()
+        
+        # Transposing the ecg signals
+        ecg_signals = ecg_signals/6000 # normalization
+        ecg_signals = ecg_signals.t() 
+        
+        qt = self.y[index]
+        # Retrieve a sample from x and y based on the index
+        return ecg_signals, qt
 
-    def __getitem__(self, index):
-        
-        # file path
-        filename= self.df['patid'].values[index]
-        asc_path = os.path.join(self.parent_directory, 'data', 'deepfake-ecg-small', str(self.split), str(filename) + '.asc')
-        
+    def __len__(self):
+        # Return the total number of samples in the dataset
