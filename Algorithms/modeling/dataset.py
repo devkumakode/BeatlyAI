@@ -1,5 +1,3 @@
-
-		if type == 'stad':
-			scaler = StandardScaler()
+			scaler = MinMaxScaler(feature_range=(0, 1))
 			scaler.fit(reshaped_x)
-		elif type == 'norm':
+
