@@ -1,18 +1,7 @@
-import torch.nn as nn
-import torch.nn.functional as F
+    return nn.Conv1d(in_planes, out_planes, kernel_size=1, stride=stride, bias=False)
 
 
-def conv_block(in_planes, out_planes, stride=1, groups=1, dilation=1):
-    return nn.Conv1d(
-        in_planes,
-        out_planes,
-        kernel_size=17,
-        stride=stride,
-        padding=8,
-        groups=groups,
-        bias=False,
-        dilation=dilation,
-    )
+class BasicBlockHeartNet(nn.Module):
+    expansion = 1
 
-
-def conv_subsumpling(in_planes, out_planes, stride=1):
+    def __init__(
