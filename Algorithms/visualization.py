@@ -1,16 +1,10 @@
-
-def visualise_ecg(ecg: np.ndarray,
-                  labels: np.ndarray,
-                  pred_vec: np.ndarray = None,
-                  start_offset: int = 0,
-                  end_offest: int = None,
-                  plot_window: int = 300,
-                  max_plots: int = 2) -> None:
+    :param max_plots: max number of plots to show (in case of very long ecg)
+    :return:
     """
+    if end_offest is None:
+        end_offest = ecg.shape[1]
+    y_formatter = FixedFormatter(["none", "P wave", "QRS", "T wave", "Extra\nsystole"])
+    y_locator = FixedLocator([0, 1, 2, 3, 4])
 
-    :param ecg: ecg signal
-    :param labels: array of the same length as ecg, containing labels [0, 1, 2, 3, 4]
-    :param pred_vec: same sa labels, but it is expected to be the model predictions
-    :param start_offset: plot from given time-step (array index)
-    :param end_offest: plot until given time-step (array index)
-    :param plot_window: width of the plot window (array index units)
+    for i, start in enumerate(range(start_offset, end_offest, plot_window)):
+        fig, ax1 = plt.subplots(figsize=(20, 3))
