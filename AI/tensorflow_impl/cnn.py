@@ -1,8 +1,7 @@
 
+par.add_argument("-e", dest="epochs",
+                 type=int, default=50,
+                 help="The number of epochs the model will train for")
 
-par = argparse.ArgumentParser(description="ECG Convolutional " +
-                                           "Neural Network implementation")
-
-par.add_argument("-lr", dest="learning_rate",
-                 type=float, default=0.001,
-                 help="Learning rate used by the model")
+par.add_argument("-bs", dest="batch_size",
+                 type=int, default=32,
