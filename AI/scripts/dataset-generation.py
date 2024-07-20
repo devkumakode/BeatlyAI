@@ -1,18 +1,13 @@
-import argparse
-import os
-import os.path as osp
+# dpi fix
+fig = plt.figure(frameon=False)
+dpi = fig.dpi
 
-import cv2
-import matplotlib.pyplot as plt
-import numpy as np
-import wfdb
-from sklearn.preprocessing import scale
-from wfdb import rdrecord
+# fig size / image size
+figsize = (image_size / dpi, image_size / dpi)
+image_size = (image_size, image_size)
 
-# Choose from peak to peak or centered
-# mode = [20, 20]
-mode = 128
 
-image_size = 128
-output_dir = "../data"
-
+def plot(signal, filename):
+    plt.figure(figsize=figsize, frameon=False)
+    plt.axis("off")
+    plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0)
