@@ -1,12 +1,17 @@
-        return self.samples
-    
+# q: what is num_workers?
+# A: num_workers (int, optional) – how many subprocesses to use for data loading. 0 means that the data will be loaded in the main process. (default: 0)
 
-# ECG dataset
-train_dataset = ECGDataSet(split='train')
-validate_dataset = ECGDataSet(split='validate')
+import torch.nn.functional as F
 
-# data loader
-# It allows you to efficiently load and iterate over batches of data during the training or evaluation process.
-train_dataloader = DataLoader(dataset=train_dataset, batch_size=128, shuffle=True, num_workers=20)
-validate_dataloader = DataLoader(dataset=validate_dataset, batch_size=128, shuffle=False, num_workers=20)
-
+class KanResInit(nn.Module):
+    def __init__(self, in_channels, filterno_1, filterno_2, filtersize_1, filtersize_2, stride):
+        #print(in_channels) --> 8
+        super(KanResInit, self).__init__()
+        self.conv1 = nn.Conv1d(in_channels, filterno_1, filtersize_1, stride=stride)
+        self.bn1 = nn.BatchNorm1d(filterno_1)
+        self.conv2 = nn.Conv1d(filterno_1, filterno_2, filtersize_2)
+        self.bn2 = nn.BatchNorm1d(filterno_2)
+        
+    def forward(self, x):
+        x = self.conv1(x)
+        x = self.bn1(x)
