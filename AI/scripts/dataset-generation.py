@@ -1,13 +1,18 @@
-# dpi fix
-fig = plt.figure(frameon=False)
-dpi = fig.dpi
+    # plt.margins(0, 0) # use for generation images with no margin
+    plt.plot(signal)
+    plt.savefig(filename)
 
-# fig size / image size
-figsize = (image_size / dpi, image_size / dpi)
-image_size = (image_size, image_size)
+    plt.close()
+
+    im_gray = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
+    im_gray = cv2.resize(im_gray, image_size, interpolation=cv2.INTER_LANCZOS4)
+    cv2.imwrite(filename, im_gray)
 
 
-def plot(signal, filename):
-    plt.figure(figsize=figsize, frameon=False)
-    plt.axis("off")
-    plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0)
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--file", required=True)
+    args = parser.parse_args()
+
+    ecg = args.file
