@@ -1,6 +1,2 @@
-import torch
-from myoptimizer import ALQ_optimizer
 
-
-REL_NORM_THRES = 1e-6
-
+def construct_bit_table(bit):
