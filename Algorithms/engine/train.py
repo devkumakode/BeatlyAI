@@ -1,11 +1,7 @@
-                print("EPOCH:{} Iter:{} of {} Loss:{:.4f} Acc:{:.4f}".format(step, i + 1, len(train_loader), loss.item(), correct / total))
 
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
+        loss_values_final.append(loss_values)
+        accuracy_final.append(accuracy)
 
-        if (step+1) % 2 == 0:
-            torch.save(net, config.RESOURCES_DIR + '/ckpt/epoch_{}.ckpt'.format(step))
+        save_as_pkl(config.RESOURCES_DIR + '/loss.pkl', loss_values_final)
+        save_as_pkl(config.RESOURCES_DIR + '/accuracy.pkl', accuracy_final)
 
-        train_test(train_loader, 'train', step, net, device, batch_size=batch_size)
-        train_test(val_loader, 'val', step, net, device, batch_size=batch_size)
