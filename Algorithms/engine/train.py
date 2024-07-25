@@ -1,17 +1,11 @@
-            loss = criterion(output, target)
+                print("EPOCH:{} Iter:{} of {} Loss:{:.4f} Acc:{:.4f}".format(step, i + 1, len(train_loader), loss.item(), correct / total))
 
-            _, predicted = torch.max(output.data, 1)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
 
-            predicted = predicted.to(device)
+        if (step+1) % 2 == 0:
+            torch.save(net, config.RESOURCES_DIR + '/ckpt/epoch_{}.ckpt'.format(step))
 
-            total += target.size(0)
-            correct += (predicted == target).sum().item()
-
-            loss_item = loss.item()
-
-            running_loss += loss_item
-            loss_values.append(running_loss)
-
-            accuracy.append(correct / total)
-
-            if (i+1) % 20 == 0:
+        train_test(train_loader, 'train', step, net, device, batch_size=batch_size)
+        train_test(val_loader, 'val', step, net, device, batch_size=batch_size)
