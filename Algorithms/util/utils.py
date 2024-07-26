@@ -1,9 +1,14 @@
 
-	plt.tick_params('y', labelsize=20)
-	plt.tick_params('x', labelsize=20)
 
-	plt.xlabel(xlabel, size=20)
-	plt.ylabel(ylabel, size=20)
+def plot_learning_curve(data, xlabel, ylabel):
+	means = list(map(lambda x: np.mean(x, axis=0), data))
+	std = list(map(lambda x: np.std(x, axis=0), data))
 
-	plt.legend(loc='best', prop={'size': 15})
-	plt.show()
+	std_plus = [
+		means[i] + std[i]
+		for i in range(len(means))
+	]
+
+	std_minus = [
+		means[i] - std[i]
+		for i in range(len(means))
