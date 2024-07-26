@@ -1,17 +1,19 @@
-import torch
-from tqdm import tqdm
+            signal_length=config.model.signal_length,
+            expansion=config.model.expansion,
+            input_channels=config.model.input_channels
+        ).to(config.device)
+        self.config = config
+        self.optimizer = torch.optim.AdamW(self.model.parameters(), lr=self.config.lr, weight_decay=1e-4)
+        self.loss = torch.nn.CrossEntropyLoss(weight=torch.tensor([0.1, 0.4, 0.2, 0.5, 0.2]).to(self.config.device))
+        self.data_loader = get_data_loaders(self.config.dataset)
+        self.metrics = {
+            Mode.train: Metrics(),
+            Mode.eval: Metrics()
+        }
 
-from ecg_tools.config import EcgConfig, Mode
-from ecg_tools.data_loader import get_data_loaders
-from ecg_tools.metrics import Metrics
-from ecg_tools.model import ECGformer
+    def train(self):
+        confusion_matrices_image_train, confusion_matrices_image_eval = [], []
+        for epoch in range(self.config.num_epochs):
+            confusion_matrices_image_train.append(self.train_epoch(epoch))
 
-
-class ECGClassifierTrainer:
-
-    def __init__(self, config: EcgConfig) -> None:
-        self.model = ECGformer(
-            embed_size=config.model.embed_size,
-            num_layers=config.model.num_layers,
-            num_heads=config.model.num_heads,
-            num_classes=config.model.num_classes,
+            if epoch % self.config.validation_frequency == 0:
