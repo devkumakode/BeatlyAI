@@ -1,13 +1,18 @@
-#!/usr/bin/env python
+                 choices=["nsrdb", "apnea-ecg", "mitdb", "afdb", "svdb"],
+                 help="The list of datasets to download")
 
-import os, sys, errno
-import csv
-import random
-import subprocess
-import argparse
+args = par.parse_args()
+dataset_list = args.dataset_list
 
-par = argparse.ArgumentParser(description="Download and process Physionet Datasets")
 
-par.add_argument("-dl", nargs="+",
-                 dest="dataset_list",
-                 default=[],
+def fetch_data():
+    """
+    nsrdb normal sinus rhythm
+    apnea
+    mitdb arrhythmia
+    afdb atrial fibrillation
+    svdb supraventricular arrhythmia 
+    """
+
+    physionet = {
+        "nsrdb": ["16265", "16272", "16273", "16420", "16483", "16539", "16773",
