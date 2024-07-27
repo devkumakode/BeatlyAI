@@ -1,12 +1,12 @@
 }
-A {
-	FONT-WEIGHT: bolder; TEXT-DECORATION: none
+BLOCKQUOTE {
+	MARGIN-LEFT: 6em; TEXT-INDENT: -4em
 }
-A:link {
-	COLOR: #990000
+BLOCKQUOTE P {
+	MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px
 }
-A:visited {
-	COLOR: #666666
+#menu {
+	BACKGROUND-COLOR: transparent
 }
-UL {
-	MARGIN-TOP: 1px; MARGIN-BOTTOM: 15px
+#menu A {
+	DISPLAY: block; COLOR: #666666
