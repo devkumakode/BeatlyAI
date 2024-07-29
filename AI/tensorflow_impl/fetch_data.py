@@ -1,18 +1,2 @@
-                 choices=["nsrdb", "apnea-ecg", "mitdb", "afdb", "svdb"],
-                 help="The list of datasets to download")
-
-args = par.parse_args()
-dataset_list = args.dataset_list
-
-
-def fetch_data():
-    """
-    nsrdb normal sinus rhythm
-    apnea
-    mitdb arrhythmia
-    afdb atrial fibrillation
-    svdb supraventricular arrhythmia 
-    """
-
-    physionet = {
-        "nsrdb": ["16265", "16272", "16273", "16420", "16483", "16539", "16773",
+                  "16786", "16795", "17052", "17453", "18177", "18184", "19088",
+                  "19090", "19093", "19140", "19830"],
