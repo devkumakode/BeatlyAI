@@ -1,14 +1,14 @@
-	]
+		title='Distribution of ECG Signal',
+		ax=None,
+		stats=True
+):
+	mean = data.mean(skipna=True)
+	std = data.std(skipna=True)
 
-	plot_rewards_with_std(
-		reward=means,
-		std_reward_plus=std_plus,
-		std_reward_minus=std_minus,
-		xlabel=xlabel,
-		ylabel=ylabel
-	)
+	if ax is None:
+		fig, ax = plt.subplots()
 
+	sns.distplot(data, bins=200, fit=norm, kde=True, ax=ax, norm_hist=True, hist=True)
 
-def plot_dist_with_stats(
-		data,
-		labels=None,
+	if stats:
+		ax.axvline(mean.item(), color='w', linestyle='dashed', linewidth=2)
