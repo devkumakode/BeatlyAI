@@ -1,1 +1,1 @@
-                net=net,
+                epochs=EPOCHS,
