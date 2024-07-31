@@ -1,2 +1,3 @@
-    layer = Conv1D(
-        filters=num_filters,
+        kernel_size=filter_length,
+        strides=subsample_length,
+        padding='same',
