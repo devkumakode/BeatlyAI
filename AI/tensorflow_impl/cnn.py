@@ -1,5 +1,10 @@
-                 help="The batch size of the model")
 
-par.add_argument("--display-step", dest="display_step",
-                 type=int, default=10,
-                 help="The display step")
+par.add_argument("--dropout", type=float, default=0.5,
+                 help="Dropout probability")
+
+par.add_argument("--restore", dest="restore_model",
+                 action="store_true", default=False,
+                 help="Restore the model previously saved")
+
+par.add_argument("--freeze", dest="freeze",
+                 action="store_true", default=False,
