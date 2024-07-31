@@ -1,14 +1,8 @@
-		title='Distribution of ECG Signal',
-		ax=None,
-		stats=True
-):
-	mean = data.mean(skipna=True)
-	std = data.std(skipna=True)
+		ax.axvline(std.item(), color='r', linestyle='dashed', linewidth=2)
+		ax.axvline(-std.item(), color='r', linestyle='dashed', linewidth=2)
 
-	if ax is None:
-		fig, ax = plt.subplots()
-
-	sns.distplot(data, bins=200, fit=norm, kde=True, ax=ax, norm_hist=True, hist=True)
-
-	if stats:
-		ax.axvline(mean.item(), color='w', linestyle='dashed', linewidth=2)
+	ax.set_xlabel("Samples")
+	ax.set_ylabel("Probability density")
+	ax.set_title(title)
+	ax.text(-7, 0.1, "Extreme negatives")
+	ax.text(7, 0.1, "Extreme positives")
