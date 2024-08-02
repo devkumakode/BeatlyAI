@@ -1,13 +1,2 @@
-    def forward(self, x):
-        x = self.init_block(x)
-        print("init block trained")
-        #print(x.shape)
-        x = self.pool(x)
-        print("pool 1 trained")
-        #print(x.shape)
-        x = self.module_blocks(x)
-        print("module blocks trained")
-        x = self.global_avg_pool(x)
-        #print(x.shape)
-        x = x.view(x.size(0), -1)
-        x = self.fc(x)
+        return x
+
