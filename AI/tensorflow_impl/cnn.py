@@ -1,10 +1,19 @@
+                 help="Freezes the model")
 
-par.add_argument("--dropout", type=float, default=0.5,
-                 help="Dropout probability")
+par.add_argument("--heart-diseases", nargs="+",
+                 dest="heart_diseases",
+                 default=["apnea-ecg", "svdb", "afdb"],
+                 choices=["apnea-ecg", "mitdb", "nsrdb", "svdb", "afdb"],
+                 help="Select the ECG diseases for the model")
 
-par.add_argument("--restore", dest="restore_model",
+par.add_argument("--verbose", dest="verbose",
                  action="store_true", default=False,
-                 help="Restore the model previously saved")
+                 help="Display information about minibatches")
 
-par.add_argument("--freeze", dest="freeze",
-                 action="store_true", default=False,
+args = par.parse_args()
+
+# Parameters
+learning_rate = args.learning_rate
+epochs = args.epochs
+batch_size = args.batch_size
+display_step = args.display_step
