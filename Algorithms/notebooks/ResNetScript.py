@@ -1,19 +1,18 @@
-    size = len(dataloader.dataset)
-    num_batches = len(dataloader)
-    model.eval()
-    test_loss, correct = 0, 0
-    with torch.no_grad():
-        for X, y in dataloader:
-            X, y = X.to(device), y.to(device)
-            pred = model(X)
-            test_loss += loss_fn(pred, y).item()
-            correct += (pred.argmax(1) == y).type(torch.float).sum().item()
-    test_loss /= num_batches
-    correct /= size
-    print(f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
 
+model = KanResWide_X2(input_shape, output_size)
+model.to(device)
+print(model)
 
-input_shape = (8,5000)  # Modify this according to your input shape
-# 128 is the batch size, 8 is the number of channels, 5000 is the number of time steps
+import torch.optim as optim
 
-output_size = 1  # Number of output units
+# Loss function for linear values (e.g., regression)
+loss_fn = nn.MSELoss()  # Mean Squared Error loss
+
+# Adam optimizer
+optimizer = optim.Adam(model.parameters(), lr=1e-3)  # You can adjust lr and other hyperparameters
+
+epochs = 50
+for t in range(epochs):
+    print(f"Epoch {t+1}\n-------------------------------")
+    train(train_dataloader, model, loss_fn, optimizer)
+    #test(validate_dataloader, model, loss_fn)
