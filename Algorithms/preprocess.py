@@ -1,6 +1,10 @@
-	y_data = np.zeros((1, window_len,))
+		ecg = load_json(filename)
 
-	for index, row in df.iterrows():
-		filename = os.path.join(config.ECG_DATA_DIR, row['name'])
-		ecg_csv_name = row['filename']
+		ecg_lead = ecg['data'][ecg_csv_name]['ecg'][0]
+		ecg_labels = ecg['data'][ecg_csv_name]['label'][0]
+		fs = ecg['data'][ecg_csv_name]['fs']
 
+		assert len(ecg_lead) == len(ecg_labels)
+
+		ecg_lead_splitted = split_ecg_lead_by_window(ecg_lead, window=window_len)
+		try:
