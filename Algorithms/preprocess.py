@@ -1,6 +1,6 @@
+	y_data = np.zeros((1, window_len,))
 
-	return x_data, y_data
+	for index, row in df.iterrows():
+		filename = os.path.join(config.ECG_DATA_DIR, row['name'])
+		ecg_csv_name = row['filename']
 
-
-def preprocess_baseline_wander_removal (df, window_len):
-	x_data = np.empty((1, window_len, 2))
