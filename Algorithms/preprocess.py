@@ -1,10 +1,9 @@
-		ecg = load_json(filename)
+			shape = ecg_lead_splitted.shape[0]*ecg_lead_splitted.shape[1]
+			ecg_lead_splitted_filtered = np.array(
+					BaselineWanderRemoval.fix_baseline_wander(ecg_lead_splitted.reshape((shape,)), sr=fs)
+			).reshape((ecg_lead_splitted.shape[0], 220, 1))
 
-		ecg_lead = ecg['data'][ecg_csv_name]['ecg'][0]
-		ecg_labels = ecg['data'][ecg_csv_name]['label'][0]
-		fs = ecg['data'][ecg_csv_name]['fs']
+			a = ecg_lead_splitted.reshape((shape,))
+			b = ecg_lead_splitted_filtered.reshape((shape,))
 
-		assert len(ecg_lead) == len(ecg_labels)
-
-		ecg_lead_splitted = split_ecg_lead_by_window(ecg_lead, window=window_len)
-		try:
+			if ecg_lead_splitted.shape[0] > 1:
