@@ -1,13 +1,15 @@
-	source: https://www.kaggle.com/grfiv4/plot-a-confusion-matrix
+	cmap:         the gradient of the values displayed from matplotlib.pyplot.cm
+				  see http://matplotlib.org/examples/color/colormaps_reference.html
+				  plt.get_cmap('jet') or plt.cm.Blues
 
-	given a sklearn confusion matrix (cm), make a nice plot
+	normalize:    If False, plot the raw numbers
+				  If True, plot the proportions
 
-	Arguments
-	---------
-	confusion_matrix: confusion matrix from sklearn.metrics.confusion_matrix
-
-	target_names: given classification classes such as [0, 1, 2]
-				  the class names, for example: ['high', 'medium', 'low']
-
-	title:        the text to display at the top of the matrix
+	Usage
+	-----
+	plot_confusion_matrix(cm           = cm,                  # confusion matrix created by
+															  # sklearn.metrics.confusion_matrix
+						  normalize    = True,                # show proportions
+						  target_names = y_labels_vals,       # list of names of the classes
+						  title        = best_estimator_name) # title of graph
 
