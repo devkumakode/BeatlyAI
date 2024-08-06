@@ -1,9 +1,17 @@
-			shape = ecg_lead_splitted.shape[0]*ecg_lead_splitted.shape[1]
-			ecg_lead_splitted_filtered = np.array(
-					BaselineWanderRemoval.fix_baseline_wander(ecg_lead_splitted.reshape((shape,)), sr=fs)
-			).reshape((ecg_lead_splitted.shape[0], 220, 1))
+				ddde = 5
+			c = np.dstack((a, b)).reshape((ecg_lead_splitted.shape[0], 220, 2))
+		except ValueError:
+			saa = 5
 
-			a = ecg_lead_splitted.reshape((shape,))
-			b = ecg_lead_splitted_filtered.reshape((shape,))
+		ecg_label_splitted = split_ecg_label_by_window(ecg_labels, window=window_len)
 
-			if ecg_lead_splitted.shape[0] > 1:
+		x_data = np.vstack((x_data, c))
+		y_data = np.vstack((y_data, ecg_label_splitted))
+
+	return x_data, y_data
+
+
+def fun (df, mask_lambda, window_len=200, bwr=False):
+	masked_df = df[mask_lambda]
+
+	if bwr:
