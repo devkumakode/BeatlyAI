@@ -1,5 +1,13 @@
-import io
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
-import cv2
-from matplotlib import pyplot as plt
-import numpy as np
+from ecg_tools.config import Mode
+
+
+class Metrics:
+
+    def __init__(self) -> None:
+        self.predictions = []
+        self.labels = []
+
+    def reset(self):
+        self.predictions = []
