@@ -1,12 +1,11 @@
-		return preprocess_baseline_wander_removal(masked_df, window_len=window_len)
+	split_df = pd.read_csv(split_scv_path)
+	split_df[['Database', 'filename']] = split_df.name.str.split('/', expand=True)
+	split_df['filename'] = split_df.apply(lambda x: extract_name(x['filename'], '', '.json'), axis=1)
 
-	return preprocess(masked_df, window_len=window_len)
-
-
-def save_as_pkl (filename, data):
-	with open(config.RESOURCES_DIR + filename, 'wb') as f:
-		pickle.dump(data, f)
-		f.close()
+	return split_df
 
 
-def prepare_split_df (split_scv_path):
+if __name__ == "__main__":
+
+	###############################################################################
+	# temporary
