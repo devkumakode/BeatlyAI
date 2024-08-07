@@ -1,17 +1,12 @@
-				ddde = 5
-			c = np.dstack((a, b)).reshape((ecg_lead_splitted.shape[0], 220, 2))
-		except ValueError:
-			saa = 5
+		return preprocess_baseline_wander_removal(masked_df, window_len=window_len)
 
-		ecg_label_splitted = split_ecg_label_by_window(ecg_labels, window=window_len)
-
-		x_data = np.vstack((x_data, c))
-		y_data = np.vstack((y_data, ecg_label_splitted))
-
-	return x_data, y_data
+	return preprocess(masked_df, window_len=window_len)
 
 
-def fun (df, mask_lambda, window_len=200, bwr=False):
-	masked_df = df[mask_lambda]
+def save_as_pkl (filename, data):
+	with open(config.RESOURCES_DIR + filename, 'wb') as f:
+		pickle.dump(data, f)
+		f.close()
 
-	if bwr:
+
+def prepare_split_df (split_scv_path):
