@@ -1,6 +1,6 @@
-nb_epoch = 10
-batch_size = 8
-counter = 0
+    if not (counter % batch_size):
+        X_train.append(inter_X_train)
+        y_train.append(inter_y_train)
+        inter_X_train = []
+        inter_y_train = []
 
-for _ in range(arrhy_len):
-    counter += 1
