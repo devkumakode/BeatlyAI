@@ -1,13 +1,13 @@
-	import matplotlib.pyplot as plt
-	import numpy as np
-	import itertools
+	plt.colorbar()
 
-	accuracy = np.trace(confusion_matrix) / float(np.sum(confusion_matrix))
-	misclass = 1 - accuracy
+	if target_names is not None:
+		tick_marks = np.arange(len(target_names))
+		plt.xticks(tick_marks, target_names, rotation=45, size=19)
+		plt.yticks(tick_marks, target_names, size=19)
 
-	if cmap is None:
-		cmap = plt.get_cmap('Blues')
+	if normalize:
+		cm = confusion_matrix.astype('float') / confusion_matrix.sum(axis=1)[:, np.newaxis]
 
-	plt.figure(figsize=(8, 6))
-	plt.imshow(confusion_matrix, interpolation='nearest', cmap=cmap)
-	plt.title(title)
+	thresh = cm.max() / 1.5 if normalize else cm.max() / 2
+	for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+		color = "white" if cm[i, j] > thresh else "black"
