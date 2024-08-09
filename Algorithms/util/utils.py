@@ -1,10 +1,7 @@
-				j, i, "{:0.4f}".format(cm[i, j]),
-				horizontalalignment="center",
-				color=color,
 				size=23
 			)
-		else:
-			plt.text(
-				j, i, "{:,}".format(cm[i, j]),
-				horizontalalignment="center",
-				color=color,
+
+	plt.tight_layout()
+	plt.ylabel('True label', size=23)
+	plt.xlabel('Predicted label\naccuracy={:0.4f}; misclass={:0.4f}'.format(accuracy, misclass), size=23)
+	plt.show()
