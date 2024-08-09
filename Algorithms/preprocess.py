@@ -1,9 +1,6 @@
-	# with open(config.RESOURCES_DIR + '/training_log.txt', 'r') as f:
-	# 	train_acc = []
-	# 	val_acc = []
-	# 	while f.readline():
-	# 		line = f.readline().split()
-	# 		if len(line) == 3:
-	# 			if line[0].split(',')[1] == 'train':
-	# 				train_acc.append(float(line[2]))
-	# 			if line[0].split(',')[1] == 'val':
+	# 				val_acc.append(float(line[2]))
+	#
+	# 	mean_train_acc = np.mean(np.array(train_acc).reshape((len(train_acc), 1)))
+	# 	mean_val_acc = np.mean(np.array(val_acc).reshape((len(val_acc), 1)))
+	# 	print('mean_train_acc', mean_train_acc)
+	# 	print('mean_val_acc', mean_val_acc)
