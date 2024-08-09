@@ -1,19 +1,11 @@
-                 help="Freezes the model")
+dropout = args.dropout
+restore_model = args.restore_model
+freeze = args.freeze
+heart_diseases = args.heart_diseases
+verbose = args.verbose
 
-par.add_argument("--heart-diseases", nargs="+",
-                 dest="heart_diseases",
-                 default=["apnea-ecg", "svdb", "afdb"],
-                 choices=["apnea-ecg", "mitdb", "nsrdb", "svdb", "afdb"],
-                 help="Select the ECG diseases for the model")
+# Network Parameters
+nr_inputs = 350 # changing this will also have to change the shape from wdense1
+nr_classes = len(heart_diseases)
 
-par.add_argument("--verbose", dest="verbose",
-                 action="store_true", default=False,
-                 help="Display information about minibatches")
-
-args = par.parse_args()
-
-# Parameters
-learning_rate = args.learning_rate
-epochs = args.epochs
-batch_size = args.batch_size
-display_step = args.display_step
+# TF Graph input
