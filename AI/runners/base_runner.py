@@ -1,5 +1,1 @@
-            )
-
-    def _init_net(self):
-        raise NotImplemented
-
+    def _init_dataloader(self):
