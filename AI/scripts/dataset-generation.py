@@ -1,6 +1,7 @@
-            else:
-                raise Exception("Wrong mode in script beginning")
+                os.makedirs(one_dim_data_dir, exist_ok=True)
+                os.makedirs(two_dim_data_dir, exist_ok=True)
 
-            if np.all([left > 0, right < len(signal)]):
-                one_dim_data_dir = osp.join(output_dir, "1D", name, sig_name, label)
-                two_dim_data_dir = osp.join(output_dir, "2D", name, sig_name, label)
+                filename = osp.join(one_dim_data_dir, "{}.npy".format(peak))
+                np.save(filename, signal[left:right])
+                filename = osp.join(two_dim_data_dir, "{}.png".format(peak))
+
