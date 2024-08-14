@@ -1,4 +1,13 @@
-        if pretrained_path:
-            self.training_epoch, self.total_iter = load_checkpoint(
-                pretrained_path, self.model, optimizer=self.optimizer,
-            )
+
+        else:
+            self.training_epoch = 0
+            self.total_iter = 0
+
+        self.epochs = self.config.get("epochs", int(1e5))
+
+    def _init_net(self):
+        raise NotImplemented
+
+    def _init_dataloaders(self):
+        raise NotImplemented
+
