@@ -1,10 +1,15 @@
-        self.labels = []
-
-    def update(self, prediction, label):
-        prediction = prediction.tolist()
-        label = label.tolist()
-        self.predictions += prediction
-        self.labels += label
+        pass
 
     @property
-    def sensitivity(self):
+    def specificity(self):
+        pass
+
+    @property
+    def recall(self):
+        pass
+
+    @property
+    def accuracy(self):
+        pass
+
+    def confusion_matrix(self):
