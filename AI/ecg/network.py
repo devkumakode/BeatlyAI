@@ -1,13 +1,19 @@
-        return K.concatenate([x, y], axis=2)
 
-    def zeropad_output_shape(input_shape):
-        shape = list(input_shape)
-        assert len(shape) == 3
-        shape[2] *= 2
-        return tuple(shape)
+    for i in range(params["conv_num_skip"]):
+        if not (block_index == 0 and i == 0):
+            layer = _bn_relu(
+                layer,
+                dropout=params["conv_dropout"] if i > 0 else 0,
+                **params)
+        layer = add_conv_weight(
+            layer,
+            params["conv_filter_length"],
+            num_filters,
+            subsample_length if i == 0 else 1,
+            **params)
+    layer = Add()([shortcut, layer])
+    return layer
 
-    shortcut = MaxPooling1D(pool_size=subsample_length)(layer)
-    zero_pad = (block_index % params["conv_increase_channels_at"]) == 0 \
-        and block_index > 0
-    if zero_pad is True:
-        shortcut = Lambda(zeropad, output_shape=zeropad_output_shape)(shortcut)
+def get_num_filters_at_index(index, num_start_filters, **params):
+    return 2**int(index / params["conv_increase_channels_at"]) \
+        * num_start_filters
