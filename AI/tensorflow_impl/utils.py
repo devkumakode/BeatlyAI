@@ -1,4 +1,2 @@
-
-
-class ModelSaver(object):
-    model_ext = ".ckpt"
+    
+    def __init__(self, save_dir=None, *args, **kwargs):
