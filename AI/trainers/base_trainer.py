@@ -1,13 +1,11 @@
+    def _init_optimizer(self):
+        optimizer = getattr(optim, self.config["optim"])(
+            self.model.parameters(), **self.config["optim_params"]
+        )
+        return optimizer
 
-        else:
-            self.training_epoch = 0
-            self.total_iter = 0
+    def train_epoch(self):
+        self.model.train()
+        total_loss = 0
 
-        self.epochs = self.config.get("epochs", int(1e5))
-
-    def _init_net(self):
-        raise NotImplemented
-
-    def _init_dataloaders(self):
-        raise NotImplemented
-
+        gt_class = np.empty(0)
