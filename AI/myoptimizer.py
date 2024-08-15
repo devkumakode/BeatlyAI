@@ -1,16 +1,19 @@
-        if not 0.0 <= lr:
-            raise ValueError("Invalid learning rate: {}".format(lr))
-        if not 0.0 <= eps:
-            raise ValueError("Invalid epsilon value: {}".format(eps))
-        if not 0.0 <= betas[0] < 1.0:
-            raise ValueError("Invalid beta parameter at index 0: {}".format(betas[0]))
-        if not 0.0 <= betas[1] < 1.0:
-            raise ValueError("Invalid beta parameter at index 1: {}".format(betas[1]))
-        if not 0.0 <= weight_decay:
-            raise ValueError("Invalid weight_decay value: {}".format(weight_decay))
-        defaults = dict(lr=lr, betas=betas, eps=eps, weight_decay=weight_decay)
-        super(ALQ_optimizer, self).__init__(params, defaults)
+    def step(self, params_bin, mode, pruning_rate=None, closure=None):
+        loss = None
+        if closure is not None:
+            loss = closure()
         
-    def __setstate__(self, state):
-        super(ALQ_optimizer, self).__setstate__(state)
-           
+        for group in self.param_groups:
+            # Check if this is a pruning step
+            if pruning_rate is not None:
+                importance_list = torch.tensor([])
+            
+            for i, (p_bin, p) in enumerate(zip(params_bin, group['params'])):
+                if p.grad is None:
+                    continue
+                
+                # Compute the gradient in both w domain and alpha domain
+                grad = p.grad.data
+                grad_alpha = p_bin.construct_grad_alpha(grad)
+                state = self.state[p]
+                
