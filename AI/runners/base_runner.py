@@ -1,1 +1,3 @@
-    def _init_dataloader(self):
+        raise NotImplemented
+
+    def inference(self):
