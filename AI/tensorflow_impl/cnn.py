@@ -1,16 +1,10 @@
-x = tf.placeholder(tf.float32, shape=[None, nr_inputs], name="X_input")
-y = tf.placeholder(tf.float32, shape=[None, nr_classes], name="Y_classes")
-keep_prob = tf.placeholder(tf.float32)
+        'wconv4': tf.Variable(tf.random_normal([10, 128, 256])),
+        # fully connected, 1024 outputs
+        'wdense1': tf.Variable(tf.random_normal([5376, 1024])),
+        # fully connected, 1024 inputs, 2048 outputs
+        'wdense2': tf.Variable(tf.random_normal([1024, 2048])),
+        # 2048 inputs, class prediction
+        'wout': tf.Variable(tf.random_normal([2048, nr_classes]))
+    }
 
-check_processed_dir_existance()
-
-
-class CNN(object):
-    weights = {
-        # 10x1 conv filter, 1 input, 64 outputs
-        'wconv1': tf.Variable(tf.random_normal([10, 1, 64])),
-        # 10x64 conv filter, 64 inputs, 128 outputs
-        'wconv2': tf.Variable(tf.random_normal([10, 64, 128])),
-        # 10x128 conv filter, 128 inputs, 128 outputs
-        'wconv3': tf.Variable(tf.random_normal([10, 128, 128])),
-        # 10x128 conv filter, 128 inputs, 256 outputs
+    biases = {
