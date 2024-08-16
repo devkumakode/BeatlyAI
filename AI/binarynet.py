@@ -1,17 +1,20 @@
-
-
-def transform_bin_basis(w_vec, max_dim, rel_norm_thres=REL_NORM_THRES):
-    """Transform a full precision weight vector into multi-bit form, i.e. binary bases and coordiantes."""
-    # Reshape the coordinates vector in w domain
-    crd_w = w_vec.detach().view(-1,1) # 展开成一个列向量
-    #print(crd_w)    
-    # Get the dimensionality in w domain
-    dim_w = crd_w.nelement()  #列向量的长度（16）
-    #print(dim_w)
-    # Determine the max number of dimensionality in alpha domain
-    if dim_w <= max_dim:
-        max_dim_alpha = dim_w
-    else:
-        max_dim_alpha = max_dim
-    # Initialize binary basis matrix in alpha domain
-    bin_basis_alpha = torch.zeros((dim_w, max_dim_alpha))
+    # Initialize coordinates vector in alpha domain
+    crd_alpha = torch.zeros(max_dim_alpha) 
+    res = crd_w.detach()
+    res_L2Norm_square = torch.sum(torch.pow(res,2))
+    ori_L2Norm_square = torch.sum(torch.pow(crd_w,2))  
+    for i in range(max_dim_alpha):
+        if res_L2Norm_square/ori_L2Norm_square < rel_norm_thres:
+            break
+        new_bin_basis = binarize(res.view(-1))
+        bin_basis_alpha[:,i] = new_bin_basis 
+        B_ = bin_basis_alpha[:,:i+1]
+        # Find the optimal coordinates in the space spanned by B_ 
+        alpha_ = torch.mm(torch.inverse(torch.mm(torch.t(B_),B_)),torch.mm(torch.t(B_),crd_w)) 
+        # Compute the residual (orthogonal to the space spanned by B_)
+        res = crd_w - torch.mm(B_, alpha_)
+        crd_alpha[:i+1] = alpha_.view(-1)
+        res_L2Norm_square = torch.sum(torch.pow(res,2))   
+    ind_neg = crd_alpha < 0
+    crd_alpha[ind_neg] = -crd_alpha[ind_neg]
+    bin_basis_alpha[:,ind_neg] = -bin_basis_alpha[:,ind_neg]
