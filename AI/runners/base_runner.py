@@ -1,3 +1,1 @@
-        raise NotImplemented
-
-    def inference(self):
+        self.model.eval()
