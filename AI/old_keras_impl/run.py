@@ -1,14 +1,14 @@
-    inter_X_train.append(np.asarray(arrhy_data[i:i+500]))
-    inter_y_train.append(0)
-    inter_X_train.append(np.asarray(malignant_data[i:i+500]))
-    inter_y_train.append(1)
-    i += 500
+y_train, y_test = np.split(y_train, [len(y_train)-validation_size])
 
-validation_size = int(0.1  * len(X_train))
+# checking batch lengths
+for batch in X_train:
+    if len(batch) != 16:
+        print("uneven batch with len: {}".format(len(batch)))
+    for example in batch:
+        if len(example) != 500:
+            print("uneven example with len: {}".format(len(example)))
 
-# remove the bugged batch
-X_train.pop(0)
-y_train.pop(0)
 
-# split training and testing sets
-X_train, X_test = np.split(X_train, [len(X_train)-validation_size])
+# shape = (X_train.shape[0], 16, 500)
+shape = X_train.shape[1:]
+
