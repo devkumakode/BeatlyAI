@@ -1,14 +1,20 @@
-                 "05091", "05121", "05261", "06426", "06453", "06995", "07162",
-                 "07859", "07879", "07910", "08215", "08219", "08378", "08405",
-                 "08434", "08455"],
-        "svdb": ["800", "801", "802", "803", "804", "805", "806", "807", "808",
-                 "809", "810", "811", "812", "820", "821", "822", "823", "824",
-                 "825", "826", "827", "828", "829", "840", "841", "842", "843",
-                 "844", "845", "846", "847", "848", "849", "850", "851", "852",
-                 "853", "854", "855", "856", "857", "858", "859", "860", "861",
-                 "862", "863", "864", "865", "866", "867", "868", "869", "870",
-                 "871", "872", "873", "874", "875", "876", "877", "878", "879",
-                 "880", "881", "882", "883", "884", "885", "886", "887", "888",
-                 "889", "890", "891", "892", "893", "894"]
-    }
+    dataset_dir = "datasets/raws"
+    
+    def check_folder_existance():
+        if not os.path.isdir(dataset_dir):
+            print("Directory {} not found".format(dataset_dir))
+            print("Creating now...")
+            os.makedirs(dataset_dir)
 
+        for database in physionet:
+            folder = os.path.join(dataset_dir, database)
+            if not os.path.isdir(folder):
+                print("Directory {} not found".format(folder))
+                print("Creating now...")
+                os.makedirs(folder)
+
+    def rdsamp_installed():
+        try:
+            subprocess.call(["rdsamp", "-h"], stdout=subprocess.DEVNULL,
+                                              stderr=subprocess.DEVNULL)
+            return True
