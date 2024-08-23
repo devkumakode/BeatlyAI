@@ -1,19 +1,8 @@
+#sidebar IMG {
+	MARGIN: 45px 0px 5px
 }
-#menu A:hover {
-	COLOR: white; BACKGROUND-COLOR: #990000
+#sidebar H2 {
+	FONT-WEIGHT: normal; FONT-SIZE: smaller; MARGIN: 0px
 }
-#menu TD {
-	PADDING-RIGHT: 0px; BORDER-TOP: #999999 1px solid; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; FONT: 10px/15px Verdana, Lucida, Arial, sans-serif; WIDTH: 100px; COLOR: black; PADDING-TOP: 0px; TEXT-ALIGN: center
-}
-#internalmenu TD {
-	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; BACKGROUND: white; PADDING-BOTTOM: 0px; MARGIN: 0px; FONT: 10px/15px Verdana, Lucida, Arial, sans-serif; COLOR: black; PADDING-TOP: 0px; TEXT-ALIGN: right
-}
-#internalmenu A {
-	DISPLAY: block; COLOR: #666666
-}
-#content {
-	CLEAR: right
-}
-#sidebar {
-	PADDING-RIGHT: 25px; MARGIN-TOP: 0.5em; TEXT-ALIGN: right
-}
+#primarycontent {
+	LINE-HEIGHT: 1.5; PADDING-TOP: 25px
