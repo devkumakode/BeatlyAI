@@ -1,15 +1,16 @@
-        'bconv1': tf.Variable(tf.random_normal([64])),
-        'bconv2': tf.Variable(tf.random_normal([128])),
-        'bconv3': tf.Variable(tf.random_normal([128])),
-        'bconv4': tf.Variable(tf.random_normal([256])),
-        'bdense1': tf.Variable(tf.random_normal([1024])),
-        'bdense2': tf.Variable(tf.random_normal([2048])),
-        'bout': tf.Variable(tf.random_normal([nr_classes]))
-    }
+        self.saver = ModelSaver(save_dir="saved_models/cnn/")
 
-    def __init__(self, weights=None, biases=None):
-        self.weights = weights if weights else self.weights
-        self.biases = biases if biases else self.biases
-        self.datasets = get_datasets(heart_diseases, nr_inputs)
-        self.label_data = get_labels(self.datasets)
+        logs_path = "tensorboard_data/cnn/"
+        self.tensorboard_handler = TensorBoardHandler(logs_path)
+        self.tensorboard_handler.add_histograms(self.weights)
+        self.tensorboard_handler.add_histograms(self.biases)
+
+        self.build()
+
+    def build(self):
+        dataset_len = []
+        for dataset in self.datasets:
+            dataset_len.append(len(dataset))
+
+        validation_size = int(0.1 * sum(dataset_len))
 
