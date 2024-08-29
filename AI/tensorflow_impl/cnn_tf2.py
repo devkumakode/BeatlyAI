@@ -1,8 +1,4 @@
-par.add_argument("-e", dest="epochs",
-                 type=int, default=50,
-                 help="The number of epochs the model will train for")
-
-par.add_argument("-bs", dest="batch_size",
-                 type=int, default=32,
-                 help="The batch size of the model")
+par.add_argument("--display-step", dest="display_step",
+                 type=int, default=10,
+                 help="The display step")
 
