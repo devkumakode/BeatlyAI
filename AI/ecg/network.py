@@ -1,12 +1,9 @@
-    optimizer = Adam(
-        lr=params["learning_rate"],
-        clipnorm=params.get("clipnorm", 1))
+                   dtype='float32',
+                   name='inputs')
 
-    model.compile(loss='categorical_crossentropy',
-                  optimizer=optimizer,
-                  metrics=['accuracy'])
+    if params.get('is_regular_conv', False):
+        layer = add_conv_layers(inputs, **params)
+    else:
+        layer = add_resnet_layers(inputs, **params)
 
-def build_network(**params):
-    from keras.models import Model
-    from keras.layers import Input
-    inputs = Input(shape=params['input_shape'],
+    output = add_output_layer(layer, **params)
