@@ -1,18 +1,11 @@
-                    exp_avg_alpha.mul_(beta1).add_(1 - beta1, grad_alpha)
-                    exp_avg_sq_alpha.mul_(beta2).addcmul_(1 - beta2, grad_alpha, grad_alpha)
-                    # Maintain the maximum of all second moment running avg. till now
-                    torch.max(max_exp_avg_sq_alpha, exp_avg_sq_alpha, out=max_exp_avg_sq_alpha)
-                    # Use the max. for normalizing running avg. of gradient
-                    denom_alpha = max_exp_avg_sq_alpha.sqrt().add_(group['eps'])
-                    bias_correction1 = 1 - beta1 ** state['step_alpha']
-                    bias_correction2 = 1 - beta2 ** state['step_alpha']
-
-                    # Compute the pseudo gradient and the pseudo diagonal Hessian 
-                    pseudo_grad_alpha = (group['lr'] / bias_correction1) * exp_avg_alpha 
-                    pseudo_hessian_alpha = denom_alpha.div(math.sqrt(bias_correction2))
-                    
-                    # Check if this is a pruning step
-                    if pruning_rate is not None:
-                        # Compute the integer used to determine the number of selected alpha's in this layer
-                        float_tmp = p_bin.num_bin_filter.item()*pruning_rate[0]
-                        int_tmp = int(float_tmp)
+                        if random.random()<float_tmp-int_tmp:
+                            int_tmp += 1 
+                        # Sort the importance of binary filters (alpha's) in this layer and select Top-k% (int_tmp) unimportant ones
+                        p_bin_importance_list = p_bin.sort_importance_bin_filter(pseudo_grad_alpha, pseudo_hessian_alpha, int_tmp) 
+                        importance_list = torch.cat((importance_list,p_bin_importance_list), 0) 
+                    else:
+                        # Take one optimization step on coordinates
+                        p_bin.alpha.add_(-pseudo_grad_alpha/pseudo_hessian_alpha)
+                        # Reconstruct the weight tensor from the current quantization
+                        p_bin.update_w_FP()
+                        tmp_p = p.detach()
