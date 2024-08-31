@@ -1,11 +1,17 @@
-    def _init_optimizer(self):
-        optimizer = getattr(optim, self.config["optim"])(
-            self.model.parameters(), **self.config["optim_params"]
-        )
-        return optimizer
+        pd_class = np.empty(0)
 
-    def train_epoch(self):
-        self.model.train()
-        total_loss = 0
+        for i, batch in enumerate(self.train_loader):
+            inputs = batch["image"].to(self.config["device"])
+            targets = batch["class"].to(self.config["device"])
 
-        gt_class = np.empty(0)
+            predictions = self.model(inputs)
+            loss = self.criterion(predictions, targets)
+
+            classes = predictions.topk(k=1)[1].view(-1).cpu().numpy()
+
+            gt_class = np.concatenate((gt_class, batch["class"].numpy()))
+            pd_class = np.concatenate((pd_class, classes))
+
+            total_loss += loss.item()
+
+            self.optimizer.zero_grad()
