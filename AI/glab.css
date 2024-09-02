@@ -1,9 +1,3 @@
 }
-#footer {
-	CLEAR: both; FONT-SIZE: x-small; PADDING-BOTTOM: 10px; PADDING-TOP: 20px
-}
-#projectlist IMG {
-	PADDING-RIGHT: 10px; PADDING-LEFT: 3px; PADDING-BOTTOM: 3px; VERTICAL-ALIGN: middle; PADDING-TOP: 3px
-}
-#projectlist TABLE {
-	PADDING-LEFT: 15px; PADDING-BOTTOM: 15px; BORDER-COLLAPSE: collapse; border-spacing: 0
+#summary TD {
+	BORDER-RIGHT: 0px; PADDING-RIGHT: 5px; BORDER-TOP: #999999 1px solid; PADDING-LEFT: 5px; MARGIN: 0px; BORDER-LEFT: 0px
