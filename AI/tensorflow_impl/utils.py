@@ -1,15 +1,19 @@
-        self.save_dir = save_dir if save_dir else "saved_models/others/"
-
-        # Create directory to store models
-        if not os.path.isdir(self.save_dir):
-            print("Saved model dir not found")
-            print("Creating {}".format(self.save_dir))
-            os.makedirs(self.save_dir)
-        self.saver = tf.train.Saver(*args, **kwargs)
-
-    def save(self, sess, model_name="model"):
         model_dir = self.save_dir + str(model_name) + self.model_ext
-        self.saver.save(sess, model_dir)
-        print("Model saved to {}".format(model_dir))
-        
-    def restore(self, sess, model_name="model"):
+        self.saver.restore(sess, model_dir)
+        print("Model restored from {}".format(model_dir))
+
+
+def shuffle_tensors(x, y):
+    assert len(x) == len(y), "Lengths don't match"
+    if type(x) == list or type(y) == list:
+        x = np.array(x)
+        y = np.array(y)
+
+    perm = np.random.permutation(len(x))
+    return x[perm], y[perm]
+
+def next_minibatch(x, y, minibatch_size):
+    assert x.shape[0] == y.shape[0], "Shapes don't match"
+    for i in range(0, x.shape[0] - minibatch_size + 1, minibatch_size):
+        slice_range = slice(i, i + minibatch_size)
+        yield x[slice_range], y[slice_range]
