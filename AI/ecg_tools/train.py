@@ -1,8 +1,6 @@
-        return confusion_matrices_image_train, confusion_matrices_image_eval
-
-    def train_epoch(self, epoch):
-        self.model.train()
-        loader = tqdm(self.data_loader[Mode.train])
-        accuracy = 0
-        self.metrics[Mode.train].reset()
-        for index, data in enumerate(loader):
+            self.optimizer.zero_grad()
+            signal, label = [d.to(self.config.device) for d in data]
+            prediction = self.model(einops.rearrange(signal, "b c e -> b e c"))
+            loss = self.loss(prediction, label)
+            loss.backward()
+            self.optimizer.step()
