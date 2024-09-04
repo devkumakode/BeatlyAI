@@ -1,5 +1,12 @@
-            nn.Dropout(p=.1),
-            nn.Linear(in_features=64, out_features=17),
-        )
+        x = self.features(x)
+        x = x.view((-1, 216))
+        x = self.classifier(x)
+        return x
 
-    def forward(self, x, ex_features=None):
+
+class MyDataset(Dataset):
+    def __init__(self):
+        base_path = './'
+        dataset_path = './Dataset'
+        classes = ['NSR', 'APB', 'AFL', 'AFIB', 'SVTA', 'WPW', 'PVC', 'Bigeminy',
+                   'Trigeminy', 'VT', 'IVR', 'VFL', 'Fusion', 'LBBBB', 'RBBBB', 'SDHB', 'PR']
