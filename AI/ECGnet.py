@@ -1,12 +1,8 @@
-        x = self.features(x)
-        x = x.view((-1, 216))
-        x = self.classifier(x)
-        return x
+        ClassesNum = len(classes)
+        X = list()
+        y = list()
 
-
-class MyDataset(Dataset):
-    def __init__(self):
-        base_path = './'
-        dataset_path = './Dataset'
-        classes = ['NSR', 'APB', 'AFL', 'AFIB', 'SVTA', 'WPW', 'PVC', 'Bigeminy',
-                   'Trigeminy', 'VT', 'IVR', 'VFL', 'Fusion', 'LBBBB', 'RBBBB', 'SDHB', 'PR']
+        for root, dirs, files in os.walk(dataset_path, topdown=False):
+            for name in files:
+                data_train = scio.loadmat(
+                    os.path.join(root, name))  # 取出字典里的value
