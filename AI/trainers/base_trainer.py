@@ -1,17 +1,11 @@
-        pd_class = np.empty(0)
+            loss.backward()
+            self.optimizer.step()
 
-        for i, batch in enumerate(self.train_loader):
-            inputs = batch["image"].to(self.config["device"])
-            targets = batch["class"].to(self.config["device"])
+            if (i + 1) % 10 == 0:
+                print(
+                    "\tIter [%d/%d] Loss: %.4f"
+                    % (i + 1, len(self.train_loader), loss.item()),
+                )
 
-            predictions = self.model(inputs)
-            loss = self.criterion(predictions, targets)
-
-            classes = predictions.topk(k=1)[1].view(-1).cpu().numpy()
-
-            gt_class = np.concatenate((gt_class, batch["class"].numpy()))
-            pd_class = np.concatenate((pd_class, classes))
-
-            total_loss += loss.item()
-
-            self.optimizer.zero_grad()
+            self.writer.add_scalar(
+                "Train loss (iterations)", loss.item(), self.total_iter,
