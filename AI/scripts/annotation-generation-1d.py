@@ -1,4 +1,11 @@
-        val_ids.extend(
-            data[data["label"] == cl]
-            .sample(frac=val_size, random_state=random_state)
-            .index,
+        )
+
+    val = data.loc[val_ids, :]
+    train = data[~data.index.isin(val.index)]
+
+    train.to_json(osp.join(output_path, "train.json"), orient="records")
+    val.to_json(osp.join(output_path, "val.json"), orient="records")
+
+    d = {}
+    for label in train.label.unique():
+        d[label] = len(d)
