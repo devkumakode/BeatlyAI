@@ -1,2 +1,1 @@
-
-    with open(osp.join(output_path, "class-mapper.json"), "w") as file:
+        file.write(json.dumps(d, indent=1))
