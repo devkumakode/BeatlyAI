@@ -1,11 +1,15 @@
-                        if random.random()<float_tmp-int_tmp:
-                            int_tmp += 1 
-                        # Sort the importance of binary filters (alpha's) in this layer and select Top-k% (int_tmp) unimportant ones
-                        p_bin_importance_list = p_bin.sort_importance_bin_filter(pseudo_grad_alpha, pseudo_hessian_alpha, int_tmp) 
-                        importance_list = torch.cat((importance_list,p_bin_importance_list), 0) 
-                    else:
-                        # Take one optimization step on coordinates
-                        p_bin.alpha.add_(-pseudo_grad_alpha/pseudo_hessian_alpha)
-                        # Reconstruct the weight tensor from the current quantization
-                        p_bin.update_w_FP()
-                        tmp_p = p.detach()
+                        tmp_p.zero_().add_(p_bin.w_FP.data)
+                                     
+                elif mode == 'basis':
+                    # Update the state parameters in w domain
+                    exp_avg, exp_avg_sq = state['exp_avg'], state['exp_avg_sq']
+                    max_exp_avg_sq = state['max_exp_avg_sq']
+                    beta1, beta2 = group['betas']
+                    state['step'] += 1
+                    # Decay the first and second moment running average coefficient
+                    exp_avg.mul_(beta1).add_(1 - beta1, grad)
+                    exp_avg_sq.mul_(beta2).addcmul_(1 - beta2, grad, grad)
+                    # Maintain the maximum of all second moment running avg. till now
+                    torch.max(max_exp_avg_sq, exp_avg_sq, out=max_exp_avg_sq)
+                    # Use the max. for normalizing running avg. of gradient
+                    denom = max_exp_avg_sq.sqrt().add_(group['eps'])
