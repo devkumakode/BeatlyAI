@@ -1,15 +1,16 @@
-    """Prune alpha for one epoch."""
-    net.eval()
-    train_loss = 0.
-    num_batches = 0
-    correct_sum = [0. for i in range(len(TOPK))]
-    total = 0
-    for (inputs, labels) in train_loader:               
-        inputs, labels = inputs.cuda(non_blocking=True), labels.cuda(non_blocking=True)
-        optimizer_w.zero_grad()
-        optimizer_b.zero_grad()
-        outputs = net(inputs)
-        loss = loss_func(outputs, labels)
-        loss.backward()   
-        optimizer_b.step()
-        optimizer_w.step(parameters_w_bin, 'coordinate', pruning_rate)
+        accuracy(outputs, labels, correct_sum, topk=TOPK)
+        train_loss += loss.data.item()
+        num_batches += 1
+        total += labels.size(0)
+    print("epoch: ", epoch, ", pruning loss: ", train_loss/num_batches)                
+    print('pruning accuracy: ', [ci/total for ci in correct_sum])
+    num_weight_layer = 0.
+    num_bit_layer = 0.
+    print('currrent number of binary filters per layer: ')
+    for p_w_bin in parameters_w_bin:
+        print(p_w_bin.num_bin_filter)
+    print('currrent average bitwidth per layer: ')
+    for p_w_bin in parameters_w_bin:
+        num_weight_layer += p_w_bin.num_weight
+        num_bit_layer += p_w_bin.avg_bit*p_w_bin.num_weight
+        print(p_w_bin.avg_bit)
