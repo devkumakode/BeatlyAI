@@ -1,5 +1,3 @@
-
-    def val(self):
-        self.model.eval()
-        total_loss = 0
+        gt_class = np.empty(0)
+        pd_class = np.empty(0)
 
