@@ -1,13 +1,12 @@
-    print('currrent average bitwidth: ', num_bit_layer/num_weight_layer)
-
- 
-def initialize(net, train_loader, loss_func, structure, num_subchannel, max_bit):
-    """Initialize the weight tensors of all layers to multi-bit form using structured sketching. 
-    Return the iterator over all weight parameters, the iterator over all other parameters, and the iterator over the multi-bit forms of all weight parameters.  
-    """
-    parameters_w = []
-    parameters_b = []
-    parameters_w_bin = []
-    i = 0
-    for name, param in net.named_parameters():
-        # Only initialize weight tensors to multi-bit form
+        if 'weight' in name and param.dim()>1:
+            parameters_w.append(param)
+            #print(param.dim())
+            # Initialize fully connected layers (param.dim()==2)
+            if 'fc' in name or 'classifier' in name:
+                print(structure[i])
+                parameters_w_bin.append(FCLayer_bin(param.data, len(parameters_w)-1, structure[i], num_subchannel[i], max_bit[i]))  
+                i += 1
+                tmp_param = param.detach()
+                tmp_param.zero_().add_(parameters_w_bin[-1].reconstruct_w())
+            # Initialize convolutional layers (param.dim()==3)
+            else:
