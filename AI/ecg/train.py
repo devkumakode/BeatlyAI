@@ -1,9 +1,3 @@
-    save_dir = make_save_dir(params['save_dir'], args.experiment)
+    model = network.build_network(**params)
 
-    util.save(preproc, save_dir)
-
-    params.update({
-        "input_shape": [None, 1],
-        "num_categories": len(preproc.classes)
-    })
-
+    stopping = keras.callbacks.EarlyStopping(patience=8)
