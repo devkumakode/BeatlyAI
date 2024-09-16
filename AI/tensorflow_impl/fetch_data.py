@@ -1,8 +1,14 @@
-                subprocess.check_call(cmd, shell=True)
-            except Exception as e:
-                print("Failed to execute command: {} with exception: {}".format(cmd, e))
-                if os.path.exists(csv_file_path):
-                    os.remove(csv_file_path)
+            subprocess.check_call(cmd, shell=True)
+    print("Done")
 
-        if os.path.isdir(database_dir) and not os.listdir(database_dir):
-            cmd = "rm -rf {}".format(database_dir)
+
+def process_data():
+    print("Processing data...")
+    raw_dir = "datasets/raws"
+    processed_dir = "datasets/processed"
+    
+    ecg_dirs = os.listdir(raw_dir)
+    
+    if not os.path.exists(processed_dir):
+        os.makedirs(processed_dir)
+
