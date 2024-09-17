@@ -1,1 +1,1 @@
-        self.X_test = tf.reshape(self.X_test, shape=[-1, n_inputs, 1])
+        self.X_val = tf.reshape(self.X_val, shape=[-1, n_inputs, 1])
