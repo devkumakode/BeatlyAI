@@ -1,12 +1,11 @@
-        # Shuffle the input, helps training
-        concat_dataset = np.concatenate(self.datasets)
-        concat_dataset, self.label_data = shuffle_tensors(concat_dataset, self.label_data)
+            print("X_train shape: {}".format(self.X_train.shape))
+            print("Y_train shape: {}".format(self.Y_train.shape))
+            print("X_test shape: {}".format(self.X_test.shape))
+            print("Y_test shape: {}".format(self.Y_test.shape))
 
-        # split training and testing sets
-        self.X_train, self.X_test = np.split(concat_dataset,
-                                             [len(concat_dataset)-validation_size])
-
-        self.Y_train, self.Y_test = np.split(self.label_data,
-                                             [len(self.label_data)-validation_size])
-
-        if verbose:
+    def train(self, x):
+        is_training = not freeze
+        # Reshape input so that we can feed it to the first conv layer
+        x = tf.reshape(x, shape=[-1, nr_inputs, 1])
+        
+        # Convolution Layer 1
