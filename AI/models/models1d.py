@@ -1,8 +1,14 @@
-        self.conv2 = conv_block(planes, planes)
-        self.bn2 = norm_layer(planes)
-        self.dropout = nn.Dropout()
-        self.downsample = downsample
-        self.stride = stride
 
-    def forward(self, x):
-        identity = x
+        out = self.bn1(x)
+        out = self.relu(out)
+        out = self.dropout(out)
+        out = self.conv1(out)
+
+        out = self.bn2(out)
+        out = self.relu(out)
+        out = self.dropout(out)
+        out = self.conv2(out)
+
+        if self.downsample is not None:
+            identity = self.downsample(x)
+
