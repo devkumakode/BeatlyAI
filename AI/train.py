@@ -1,19 +1,14 @@
-    print('currrent binary filter number per layer: ')
-    for p_w_bin in parameters_w_bin:
-        print(p_w_bin.num_bin_filter)
-    print('currrent average bitwidth per layer: ')
-    for p_w_bin in parameters_w_bin:
-        num_weight_layer += p_w_bin.num_weight
-        num_bit_layer += p_w_bin.avg_bit*p_w_bin.num_weight
-        print(p_w_bin.avg_bit)
-        print(p_w_bin.num_weight)
-    print('currrent average bitwidth: ', num_bit_layer/num_weight_layer)
-    return parameters_w, parameters_b, parameters_w_bin 
-      
-     
-def validate(net, val_loader, loss_func):
-    """Get the validation loss and validation accuracy."""
-    net.eval()
-    val_loss = 0.
-    num_batches = 0
-    correct_sum = [0. for i in range(len(TOPK))]
+    total = 0
+    with torch.no_grad():
+        for (inputs, labels) in val_loader:
+            inputs, labels = inputs.cuda(non_blocking=True), labels.cuda(non_blocking=True)
+            outputs = net(inputs)
+            loss = loss_func(outputs, labels)  
+            accuracy(outputs, labels, correct_sum, topk=TOPK)
+            total += labels.size(0)
+            val_loss += loss.data.item()
+            num_batches += 1 
+        print('validation loss: ', val_loss/num_batches)
+        print("validation accuracy: ", [ci/total for ci in correct_sum])
+        return [ci/total for ci in correct_sum]
+
