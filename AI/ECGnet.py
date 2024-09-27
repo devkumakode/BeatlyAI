@@ -1,1 +1,3 @@
-        self.len = X_train.shape[0]  # 取第0元素：长度
+        self.x_train = torch.from_numpy(X_train).float().to("cuda")
+        self.y_train = torch.from_numpy(y_train).long().to("cuda")
+
