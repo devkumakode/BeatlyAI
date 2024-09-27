@@ -1,11 +1,8 @@
-        conv3 = self.maxpool1d(conv3)
-        # Batch Norm Layer 3
-        conv3 = tf.contrib.layers.batch_norm(conv3, is_training=is_training)
+        # Reshape conv4 output to fit fully connected layer input
+        # shape_size is a cause for errors, it is determined using
+        # conv4.shape[1]*conv4.shape[2] and also has to be changed in weight definition
+        shape_size = conv4.shape[1] * conv4.shape[2]
+        fc1 = tf.reshape(conv4, [-1, shape_size])
 
-        # Convolution Layer 4
-        conv4 = self.conv1d(conv3, self.weights['wconv4'], self.biases['bconv4'])
-        conv4 = self.maxpool1d(conv4)
-        # Batch Norm Layer 4
-        conv4 = tf.contrib.layers.batch_norm(conv4, is_training=is_training)
-
-        # Fully connected layer
+        # Fully connected layer 1
+        fc1 = tf.add(tf.matmul(fc1, self.weights['wdense1']), self.biases['bdense1'])
