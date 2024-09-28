@@ -1,12 +1,20 @@
-        elif self.structure == 'pixelwise':
-            return torch.transpose(w_bin,1,2).reshape(self.tensor_shape)
-        elif self.structure == 'channelwise':
-            return w_bin.reshape(self.tensor_shape)
+        else:
+            self.w_FP.zero_().add_(self.reconstruct_w())
 
-    def update_w_FP(self, w_FP_new=None):
-        """Update the full precision weight tensor.
-        In STE with loss-aware optimization, w_FP is the maintained full precision weight tensor.
-        In ALQ optimization, w_FP is used to store the reconstructed weight tensor from the current quantization. 
+    def construct_grad_alpha(self, grad_w):
+        """Compute and return the gradient (or the first momentum) in alpha domain w.r.t the loss.
         """
-        if w_FP_new is not None:
-            self.w_FP.add_(w_FP_new)
+        if self.structure == 'kernelwise':
+            return torch.matmul(self.B.float(), grad_w.reshape((self.tensor_shape[0],self.tensor_shape[1],-1,1)))*self.mask.float()
+        elif self.structure == 'pixelwise':
+            return torch.matmul(self.B.float(), torch.transpose(grad_w.reshape((self.tensor_shape[0],self.tensor_shape[1],-1,1)), 1,2) )*self.mask.float()
+        elif self.structure == 'channelwise':
+            return torch.matmul(self.B.float(), grad_w.reshape((self.tensor_shape[0],1,-1,1)))*self.mask.float()
+
+    def construct_hessian_alpha(self, diag_hessian_w):
+        """Compute and return the diagonal Hessian (or the second momentum) in alpha domain w.r.t the loss.
+        """
+        if self.structure == 'kernelwise':
+            diag_hessian = torch.matmul(self.B.float()*diag_hessian_w.reshape((self.tensor_shape[0],self.tensor_shape[1],1,-1)), torch.transpose(self.B,2,3).float())
+            return torch.diagonal(diag_hessian,dim1=-2,dim2=-1).unsqueeze(-1)*self.mask.float()
+        elif self.structure == 'pixelwise':
