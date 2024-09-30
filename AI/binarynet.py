@@ -1,20 +1,20 @@
-            diag_hessian = torch.matmul(self.B.float()*torch.transpose(diag_hessian_w.reshape((self.tensor_shape[0],self.tensor_shape[1],1,-1)), 1,3), torch.transpose(self.B,2,3).float())
-            return torch.diagonal(diag_hessian,dim1=-2,dim2=-1).unsqueeze(-1)*self.mask.float()
-        elif self.structure == 'channelwise':
-            diag_hessian = torch.matmul(self.B.float()*diag_hessian_w.reshape((self.tensor_shape[0],1,1,-1)), torch.transpose(self.B,2,3).float())
-            return torch.diagonal(diag_hessian,dim1=-2,dim2=-1).unsqueeze(-1)*self.mask.float()
-
-    def sort_importance_bin_filter(self, grad_alpha, diag_hessian_alpha, num_top):
-        """Compute and sort the importance of binary filters (alpha's) in this layer.
-        The importance is defined by the modeled loss increment caused by pruning each individual alpha.
-        Return the selected num_top alpha's with the least importance.
+        self.mask.view(-1)[self.mask.view(-1).nonzero().view(-1)[ind_prune]]=0   
+        self.B *= self.mask.char()
+        self.alpha *= self.mask.float()  
+        self.num_bin_filter = torch.sum(self.mask)  
+        self.avg_bit = self.num_bin_filter.float()/(self.mask.size(0)*self.mask.size(1))
+        if num_bin_filter_-self.num_bin_filter != ind_prune.size(0):
+            print('wrong pruning')
+            return False
+        return True
+        
+    def optimize_bin_basis(self, pseudo_grad, pseudo_hessian):
+        """Take one optimization step on the binary bases of this layer while fixing coordinates.
         """
-        delta_loss_prune = -grad_alpha*self.alpha+0.5*torch.pow(self.alpha,2)*diag_hessian_alpha
-        sorted_ind = torch.argsort(delta_loss_prune[self.mask].view(-1))
-        top_importance_list = torch.tensor([[self.ind_layer, sorted_ind[i], delta_loss_prune.view(-1)[sorted_ind[i]]] for i in range(num_top)])  
-        return top_importance_list
-                
-    def prune_alpha(self, ind_prune): 
-        """Prune the cooresponding alpha's of this layer give the indexes.
-        """
-        num_bin_filter_ = torch.sum(self.mask)
+        # Compute the target weight tensor, i.e. the optimal point in w domain according to the quadratic model function 
+        target_w = self.w_FP-pseudo_grad/pseudo_hessian
+        if self.structure == 'kernelwise':
+            all_disc_w = torch.matmul(self.bit_table.view((1,1,self.bit_table.size(0),self.bit_table.size(1))).float(),self.alpha)
+            ind_opt = torch.argmin(torch.abs(target_w.view((self.tensor_shape[0],self.tensor_shape[1],1,-1)) - all_disc_w), dim=2)
+            self.B = torch.transpose((self.bit_table[ind_opt.view(-1),:]).view(self.tensor_shape[0],self.tensor_shape[1],self.tensor_shape[2],self.max_bit), 2,3)
+            self.B *= self.mask.char()
