@@ -1,17 +1,16 @@
-        return self.x_train[index], self.y_train[index]  # 返回对应样本即可
+            for name in files:
+                data_train = scio.loadmat(
+                    os.path.join(root, name))  # 取出字典里的value
 
-    def __len__(self):
-        return self.len
+        # arr -> list
+                data_arr = data_train.get('val')
+                data_list = data_arr.tolist()
+                X.append(data_list[0])  # [[……]] -> [ ]
+                y.append(int(os.path.basename(root)[0:2]) - 1)
 
-
-class TestDataset(Dataset):
-    def __init__(self):
-        base_path = './'
-        dataset_path = './Dataset'
-        classes = ['NSR', 'APB', 'AFL', 'AFIB', 'SVTA', 'WPW', 'PVC', 'Bigeminy',
-                   'Trigeminy', 'VT', 'IVR', 'VFL', 'Fusion', 'LBBBB', 'RBBBB', 'SDHB', 'PR']
-        ClassesNum = len(classes)
-        X = list()
-        y = list()
-
-        for root, dirs, files in os.walk(dataset_path, topdown=False):
+        X = np.array(X)
+        y = np.array(y)
+        X = standardization(X)
+        X = X.reshape((1000, 1, 3600))
+        y = y.reshape((1000))
+        X_train, X_test, y_train, y_test = train_test_split(
