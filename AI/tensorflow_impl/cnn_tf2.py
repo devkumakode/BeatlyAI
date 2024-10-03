@@ -1,6 +1,3 @@
-
-    print("-"*50)
-    if restore_model:
-        print("Restoring model: {}".format('saved_models/cnn/model.hdf5'))
-
-    # Train
+    model.cnn_model.fit(X_train, Y_train, batch_size=batch_size,
+                        epochs=epochs, validation_data=(X_val, Y_val),
+                        callbacks=model.callbacks)
