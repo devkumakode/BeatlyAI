@@ -1,16 +1,16 @@
-            for name in files:
-                data_train = scio.loadmat(
-                    os.path.join(root, name))  # 取出字典里的value
+            X, y, test_size=0.2)
+        #print("X_test  : ", len(X_test))
+        #print("shape of X_test : ", np.shape(X_test))
+        #print("shape of y_test : ", np.shape(y_test))
+        self.len = X_test.shape[0]  # 取第0元素：长度
+        self.x_test = torch.from_numpy(X_test).float().to("cuda")
+        self.y_test = torch.from_numpy(y_test).long().to("cuda")
 
-        # arr -> list
-                data_arr = data_train.get('val')
-                data_list = data_arr.tolist()
-                X.append(data_list[0])  # [[……]] -> [ ]
-                y.append(int(os.path.basename(root)[0:2]) - 1)
+    def __getitem__(self, index):
+        return self.x_test[index], self.y_test[index]  # 返回对应样本即可
 
-        X = np.array(X)
-        y = np.array(y)
-        X = standardization(X)
-        X = X.reshape((1000, 1, 3600))
-        y = y.reshape((1000))
-        X_train, X_test, y_train, y_test = train_test_split(
+    def __len__(self):
+        return self.len
+
+
+class ValDataset(Dataset):
