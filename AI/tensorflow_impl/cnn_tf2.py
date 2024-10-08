@@ -1,13 +1,7 @@
+    y_pred = np.argmax(y_pred, axis=1)
+    y_true = np.argmax(Y_test, axis=1)
 
-    print("-"*50)
-
-    # Total training time
-    print("Total training time: {0:.2f}s".format(time.time() - total_time))
-
-    # Test
-    model.cnn_model.evaluate(X_test, Y_test, batch_size=batch_size)
-    print("-"*50)
-    print("Testing results:")
-    y_pred = model.cnn_model.predict(X_test, batch_size=batch_size)
-
-    # The following scikit-learn methods only accept array of labels, not one hot encodings
+    # Precision and recall could also be done as callbacks in the evaluate or fit function
+    print("Precision: {}".format(precision_score(y_true, y_pred, average='micro')))
+    print("Recall: {}".format(recall_score(y_true, y_pred, average='micro')))
+    print("Confusion matrix: \n{}".format(confusion_matrix(y_true, y_pred, labels=[0,1,2])))
