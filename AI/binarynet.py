@@ -1,20 +1,10 @@
-        """
-        num_bin_filter_ = torch.sum(self.mask)
-        self.mask.view(-1)[self.mask.view(-1).nonzero().view(-1)[ind_prune]]=0   
         self.B *= self.mask.char()
-        self.alpha *= self.mask.float()   
-        self.num_bin_filter = torch.sum(self.mask) 
-        self.avg_bit = self.num_bin_filter.float()/(self.mask.size(0)*self.mask.size(1))
-        if num_bin_filter_-self.num_bin_filter != ind_prune.size(0):
-            print('wrong pruning')
-            return False
-        return True    
-                   
-    def optimize_bin_basis(self, pseudo_grad, pseudo_hessian):
-        """Take one optimization step on the binary bases of this layer while fixing coordinates.
+        return True
+                               
+    def speedup(self, pseudo_grad, pseudo_hessian):
+        """Speed up the optimization on binary bases, i.e. take a following optimization step on coordinates while fixing binary bases. 
         """
-        # Compute the target weight tensor, i.e. the optimal point in w domain according to the quadratic model function 
-        target_w = self.w_FP-pseudo_grad/pseudo_hessian
-        all_disc_w = torch.matmul(self.bit_table.view((1,1,self.bit_table.size(0),self.bit_table.size(1))).float(),self.alpha)
-        ind_opt = torch.argmin(torch.abs(target_w.view((self.tensor_shape[0],self.num_subchannel,1,-1)) - all_disc_w), dim=2)
-        self.B = torch.transpose((self.bit_table[ind_opt[:],:]).view(self.tensor_shape[0],self.num_subchannel,self.num_w_subc,self.max_bit), 2,3)
+        revised_grad_w = -pseudo_hessian*self.w_FP+pseudo_grad
+        revised_hessian = torch.matmul(self.B.float()*pseudo_hessian.view((self.tensor_shape[0],self.num_subchannel,1,-1)),torch.transpose(self.B,2,3).float())
+        revised_hessian += torch.diag_embed(1+1e-6-(self.mask.float().squeeze(-1))) 
+        revised_grad = torch.matmul(self.B.float(),revised_grad_w.view((self.tensor_shape[0],self.num_subchannel,-1,1)))
