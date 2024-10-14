@@ -1,45 +1,23 @@
+        print("#"*50)
+        print("Epoch summary:")
+        print("Epoch: {}".format(epoch))
+        print("Training took: {0:.2f}s".format(time.time() - epoch_time))
+        summary, acc = sess.run([merged, accuracy],
+                                feed_dict={x: X_train,
+                                           y: Y_train,
+                                           keep_prob: 1.0})
+        print("Training accuracy: {0:.4f}".format(acc))
 
-# Initializing the variables
-init = tf.global_variables_initializer()
+        # Run testing accuracy
+        acc = sess.run(accuracy, feed_dict={x: X_test,
+                                            y: Y_test,
+                                            keep_prob: 1.0})
+        print("Testing accuracy: {0:.4f}".format(acc))
+        print("#"*50)
 
-X_train, X_test, Y_train, Y_test = model.get_data()
+        # write to log
+        model.tensorboard_handler.writer.add_summary(summary, epoch)
 
-
-# Launch the graph
-with tf.Session() as sess:
-    # Initialize the variables for the current session
-    sess.run(init)
-
-    # Add the graph to tensorboard writer
-    model.tensorboard_handler.writer.add_graph(sess.graph)
-    step = 1
-
-    # If restore_model flag True, restore the model
-    if restore_model:
-        model.saver.restore(sess)
-
-    # Set start time
-    total_time = time.time()
-    epoch_time = time.time()
-
-    print("-"*50)
-    # Train
-    for epoch in range(1, epochs):
-        for X_train_batch, Y_train_batch in next_minibatch(X_train, Y_train, batch_size):
-            sess.run(optimizer, feed_dict={x: X_train_batch,
-                                           y: Y_train_batch,
-                                           keep_prob: dropout})
-
-            # Once a few steps run the accuracy for the training model
-            if verbose and (step % display_step) == 0:
-                loss, acc = sess.run([cost, accuracy],
-                                     feed_dict={x: X_train,
-                                                y: Y_train,
-                                                keep_prob: 1.0})
-
-                print("Step: {}".format(step))
-                print("Training loss: {:.4f}".format(loss))
-                print("Training Accuracy: {:.4f}".format(acc))
-
-            step += 1
+        # Reset epoch time
+        epoch_time = time.time()
 
